@@ -7,6 +7,11 @@ export const Media: CollectionConfig = {
   upload: {
     mimeTypes: ['image/*'],
     focalPoint: true,
+    // Lets you paste an image link instead of choosing a file. The server
+    // downloads it, so only trusted hosts are allowed.
+    pasteURL: {
+      allowList: [{ hostname: 'res.cloudinary.com', protocol: 'https' }],
+    },
     adminThumbnail: 'thumbnail',
     imageSizes: [
       { name: 'thumbnail', width: 400, height: 300, formatOptions: { format: 'webp', options: { quality: 75 } } },
