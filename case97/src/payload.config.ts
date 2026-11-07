@@ -6,6 +6,7 @@ import { buildConfig, type Plugin } from 'payload'
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { s3Storage } from '@payloadcms/storage-s3'
+import { cloudStoragePlugin } from '@payloadcms/plugin-cloud-storage'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 
 import { Admins } from './collections/Admins'
@@ -18,6 +19,7 @@ import { Audio } from './collections/Audio'
 import { SiteSettings } from './globals/SiteSettings'
 import { defaultLocale, localeLabels, locales } from './lib/locales'
 import { devConsoleEmail } from './lib/devEmail'
+import { cloudinaryAdapter, cloudinaryEnabled } from './storage/cloudinary'
 
 // Some ISPs/routers refuse the SRV lookups MongoDB Atlas needs.
 // DNS_SERVERS in .env overrides them, e.g. DNS_SERVERS=1.1.1.1,8.8.8.8
@@ -28,8 +30,10 @@ if (process.env.DNS_SERVERS) {
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-// Cloudflare R2 is used when its keys are in .env. Without them, uploads are
-// saved to the project's /media and /audio folders, which is fine for development.
+// Where uploads go, in order of preference:
+// 1. Cloudinary, when CLOUDINARY_* keys are in .env (images on Cloudinary's CDN, audio private)
+// 2. Cloudflare R2, when R2_* keys are in .env
+// 3. Otherwise the project's /media and /audio folders (fine for local development only)
 const r2Enabled = Boolean(
   process.env.R2_ACCOUNT_ID &&
     process.env.R2_ACCESS_KEY_ID &&
@@ -41,6 +45,10 @@ const r2Enabled = Boolean(
 const r2Config = {
   endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
   region: 'auto',
+  forcePathStyle: true, // R2 expects bucket names in the path
+  // Newer AWS SDKs add checksum headers that Cloudflare R2 can reject.
+  requestChecksumCalculation: 'WHEN_REQUIRED' as const,
+  responseChecksumValidation: 'WHEN_REQUIRED' as const,
   credentials: {
     accessKeyId: process.env.R2_ACCESS_KEY_ID || '',
     secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || '',
@@ -48,29 +56,36 @@ const r2Config = {
 }
 const mediaPublicUrl = (process.env.R2_MEDIA_PUBLIC_URL || '').replace(/\/$/, '')
 
-const storagePlugins: Plugin[] = r2Enabled
-  ? [
-      // Images: PUBLIC bucket, served straight from Cloudflare.
-      s3Storage({
-        collections: {
-          media: {
-            prefix: 'media',
-            disablePayloadAccessControl: true,
-            generateFileURL: ({ filename, prefix }) =>
-              `${mediaPublicUrl}/${[prefix, filename].filter(Boolean).join('/')}`,
-          },
-        },
-        bucket: process.env.R2_MEDIA_BUCKET || '',
-        config: r2Config,
-      }),
-      // Audio: PRIVATE bucket, only reachable through Payload's access control.
-      s3Storage({
-        collections: { audio: { prefix: 'audio' } },
-        bucket: process.env.R2_AUDIO_BUCKET || '',
-        config: r2Config,
-      }),
-    ]
-  : []
+const cloudinaryPlugin: Plugin = cloudStoragePlugin({
+  collections: {
+    media: { adapter: cloudinaryAdapter('image'), prefix: 'media', disableLocalStorage: true, disablePayloadAccessControl: true },
+    audio: { adapter: cloudinaryAdapter('audio'), prefix: 'audio', disableLocalStorage: true },
+  },
+})
+
+const r2Plugins: Plugin[] = [
+  // Images: PUBLIC bucket, served straight from Cloudflare.
+  s3Storage({
+    collections: {
+      media: {
+        prefix: 'media',
+        disablePayloadAccessControl: true,
+        generateFileURL: ({ filename, prefix }) =>
+          `${mediaPublicUrl}/${[prefix, filename].filter(Boolean).join('/')}`,
+      },
+    },
+    bucket: process.env.R2_MEDIA_BUCKET || '',
+    config: r2Config,
+  }),
+  // Audio: PRIVATE bucket, only reachable through Payload's access control.
+  s3Storage({
+    collections: { audio: { prefix: 'audio' } },
+    bucket: process.env.R2_AUDIO_BUCKET || '',
+    config: r2Config,
+  }),
+]
+
+const storagePlugins: Plugin[] = cloudinaryEnabled() ? [cloudinaryPlugin] : r2Enabled ? r2Plugins : []
 
 // Brevo sends real emails when its SMTP key is in .env. Without it, emails
 // (with their verification and password-reset links) are printed in the terminal.
