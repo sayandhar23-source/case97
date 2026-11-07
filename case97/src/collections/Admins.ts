@@ -28,8 +28,16 @@ export const Admins: CollectionConfig = {
     beforeChange: [
       async ({ operation, req, data }) => {
         if (operation === 'create') {
-          const { totalDocs } = await req.payload.count({ collection: 'admins', overrideAccess: true, req })
-          if (totalDocs > 0) throw new APIError('An admin account already exists.', 403)
+          // find() works inside MongoDB transactions; count() does not.
+          const existing = await req.payload.find({
+            collection: 'admins',
+            limit: 1,
+            depth: 0,
+            pagination: false,
+            overrideAccess: true,
+            req,
+          })
+          if (existing.docs.length > 0) throw new APIError('An admin account already exists.', 403)
         }
         return data
       },
