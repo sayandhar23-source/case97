@@ -20,6 +20,7 @@ const en = {
     where: 'Where it is', directions: 'Get directions', related: 'More cases',
     lockedTitle: 'The rest of this case is for Premium readers', lockedBody: 'Unlock every story, ad-free reading and narration in four languages.', lockedCta: 'See Premium',
     readingMode: 'Reading mode', chapter: 'Chapter',
+    readIn: 'Read in', notTranslated: 'Not translated yet', fallbackNotice: 'This story isn’t translated into this language yet, so you’re reading the English version.',
   },
   auth: {
     registerTitle: 'Who’s looking back?', registerIntro: 'Create your account to save stories, follow places and pick up where you stopped.',
@@ -67,6 +68,7 @@ const fr: Dict = {
     where: 'Où se trouve-t-il', directions: 'Itinéraire', related: 'Autres dossiers',
     lockedTitle: 'La suite de ce dossier est réservée aux lecteurs Premium', lockedBody: 'Débloquez toutes les histoires, la lecture sans publicité et la narration en quatre langues.', lockedCta: 'Découvrir Premium',
     readingMode: 'Mode de lecture', chapter: 'Chapitre',
+    readIn: 'Lire en', notTranslated: 'Pas encore traduit', fallbackNotice: 'Cette histoire n’est pas encore traduite dans cette langue : vous lisez la version anglaise.',
   },
   auth: {
     registerTitle: 'Qui vous regarde ?', registerIntro: 'Créez votre compte pour enregistrer des histoires et reprendre là où vous vous êtes arrêté.',
@@ -112,6 +114,7 @@ const es: Dict = {
     where: 'Dónde está', directions: 'Cómo llegar', related: 'Más casos',
     lockedTitle: 'El resto de este caso es para lectores Premium', lockedBody: 'Desbloquea todas las historias, lectura sin anuncios y narración en cuatro idiomas.', lockedCta: 'Ver Premium',
     readingMode: 'Modo de lectura', chapter: 'Capítulo',
+    readIn: 'Leer en', notTranslated: 'Aún sin traducir', fallbackNotice: 'Esta historia aún no está traducida a este idioma, así que estás leyendo la versión en inglés.',
   },
   auth: {
     registerTitle: '¿Quién te devuelve la mirada?', registerIntro: 'Crea tu cuenta para guardar historias y seguir donde lo dejaste.',
@@ -157,6 +160,7 @@ const bn: Dict = {
     where: 'কোথায় অবস্থিত', directions: 'দিকনির্দেশ', related: 'আরও কেস',
     lockedTitle: 'এই কেসের বাকি অংশ প্রিমিয়াম পাঠকদের জন্য', lockedBody: 'সব গল্প, বিজ্ঞাপনহীন পড়া আর চার ভাষায় অডিও বর্ণনা আনলক করুন।', lockedCta: 'প্রিমিয়াম দেখুন',
     readingMode: 'পড়ার ধরন', chapter: 'অধ্যায়',
+    readIn: 'পড়ুন', notTranslated: 'এখনও অনুবাদ হয়নি', fallbackNotice: 'এই গল্পটি এখনও এই ভাষায় অনুবাদ করা হয়নি, তাই আপনি ইংরেজি সংস্করণ পড়ছেন।',
   },
   auth: {
     registerTitle: 'কে তাকিয়ে আছে?', registerIntro: 'গল্প সংরক্ষণ করতে আর যেখানে থেমেছিলেন সেখান থেকে পড়তে অ্যাকাউন্ট খুলুন।',
