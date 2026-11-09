@@ -5,7 +5,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Category, Media, Reader, SiteSetting, Story } from '@/payload-types'
 import { hasPremium, type AppUser } from '@/access'
-import type { AppLocale } from './locales'
+import { locales, type AppLocale } from './locales'
 
 export const getPayloadClient = () => getPayload({ config })
 
@@ -115,3 +115,13 @@ export const imageUrl = (
 }
 
 export const asMedia = (m: unknown): Media | null => (m && typeof m === 'object' ? (m as Media) : null)
+
+// Which languages a story is really written in (title and text both filled in).
+// Without this check, untranslated stories silently fall back to English.
+export const getAvailableLocales = cache(async (id: string | number): Promise<AppLocale[]> => {
+  const payload = await getPayloadClient()
+  const doc = await payload.findByID({ collection: 'stories', id, locale: 'all', fallbackLocale: false, depth: 0 })
+  const title = (doc.title ?? {}) as unknown as Record<string, string | null | undefined>
+  const body = (doc.body ?? {}) as unknown as Record<string, { root?: { children?: unknown[] } } | null | undefined>
+  return locales.filter((l) => Boolean(title[l]?.trim()) && (body[l]?.root?.children?.length ?? 0) > 0)
+})
