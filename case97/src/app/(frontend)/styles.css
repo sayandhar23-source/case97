@@ -327,3 +327,12 @@ select.input { appearance: none; cursor: pointer; }
 .book-page .chapter:first-child h2, .book-page > div > .chapter:first-child h2 { margin-top: 0; }
 .book-page .fig { margin: 1em 0; }
 .book-page .fig img { max-height: 34vh; object-fit: cover; }
+
+/* ===== "Read in" language bar on stories ===== */
+.langbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 18px; font: 14px var(--f-body); }
+.langbar-label { color: var(--muted); margin-right: 4px; }
+.langbar a, .langbar span.on, .langbar span.off { min-height: 40px; display: inline-flex; align-items: center; padding: 0 16px; border-radius: 999px; border: 1px solid var(--rule); text-decoration: none; color: var(--ink); }
+.langbar a:hover { border-color: var(--accent); color: var(--accent); }
+.langbar span.on { background: var(--ink); color: var(--bg); border-color: var(--ink); font-weight: 600; }
+.langbar span.off { opacity: .45; border-style: dashed; cursor: help; }
+.lang-notice { margin: 14px 0 0; padding: 10px 14px; border-left: 3px solid var(--accent); background: var(--paper); color: var(--muted); font: 14px/1.5 var(--f-body); max-width: 40em; }
