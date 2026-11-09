@@ -11,7 +11,8 @@ import { StoryRichText } from '@/components/StoryRichText'
 import { WishlistButton } from '@/components/WishlistButton'
 import { paginate, preview, type LexicalState } from '@/lib/book'
 import { formatNumber, getDict, toLocale } from '@/lib/i18n'
-import { getRelated, getSettings, getStoryBySlug, getViewer, imageUrl } from '@/lib/payload'
+import { localeLabels, locales } from '@/lib/locales'
+import { getAvailableLocales, getRelated, getSettings, getStoryBySlug, getViewer, imageUrl } from '@/lib/payload'
 
 type Params = { params: Promise<{ locale: string; slug: string }> }
 
@@ -35,7 +36,7 @@ export default async function StoryPage({ params }: Params) {
   const story = await getStoryBySlug(locale, slug)
   if (!story) notFound()
 
-  const [viewer, settings, related] = await Promise.all([getViewer(), getSettings(locale), getRelated(locale, story)])
+  const [viewer, settings, related, available] = await Promise.all([getViewer(), getSettings(locale), getRelated(locale, story), getAvailableLocales(story.id)])
   const locked = Boolean(story.premiumOnly && !viewer.isPremium)
   const body = story.body as unknown as LexicalState
   const content = locked ? preview(body) : body
@@ -76,6 +77,21 @@ export default async function StoryPage({ params }: Params) {
           {meter}
           {place ? <span><IconPin /> {[place.region, place.country].filter(Boolean).join(', ')}</span> : null}
         </div>
+        <nav className="langbar" aria-label={t.story.readIn}>
+          <span className="langbar-label">{t.story.readIn}</span>
+          {locales.map((l) =>
+            l === locale ? (
+              <span key={l} lang={l} className="on" aria-current="true">{localeLabels[l]}</span>
+            ) : available.includes(l) ? (
+              <Link key={l} lang={l} hrefLang={l} href={`/${l}/stories/${story.slug}`}>{localeLabels[l]}</Link>
+            ) : (
+              <span key={l} lang={l} className="off" title={t.story.notTranslated}>{localeLabels[l]}</span>
+            ),
+          )}
+        </nav>
+        {!available.includes(locale) && (
+          <p className="lang-notice" role="note">{t.story.fallbackNotice}</p>
+        )}
       </header>
       {cover && <div className="wrap"><div className="story-cover"><img src={cover} alt={coverAlt} /></div></div>}
 
