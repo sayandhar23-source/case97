@@ -336,3 +336,42 @@ select.input { appearance: none; cursor: pointer; }
 .langbar span.on { background: var(--ink); color: var(--bg); border-color: var(--ink); font-weight: 600; }
 .langbar span.off { opacity: .45; border-style: dashed; cursor: help; }
 .lang-notice { margin: 14px 0 0; padding: 10px 14px; border-left: 3px solid var(--accent); background: var(--paper); color: var(--muted); font: 14px/1.5 var(--f-body); max-width: 40em; }
+
+/* ===== Ambient light ===== */
+:root { --amb: 232 161 95; --amb-2: 200 116 46; --amb-blend: screen; --amb-strength: 1; }
+html[data-ambient-theme='haunted'] { --amb: 214 84 62; --amb-2: 255 150 80; }
+html[data-ambient-theme='chronicle'] { --amb: 205 140 70; --amb-2: 232 190 120; --amb-blend: multiply; --amb-strength: .6; }
+html[data-ambient-theme='mystery'] { --amb: 217 164 65; --amb-2: 90 130 190; }
+html[data-ambient-theme='folklore'] { --amb: 226 181 90; --amb-2: 90 170 120; }
+html[data-ambient-theme='fieldGuide'] { --amb: 31 95 173; --amb-2: 224 122 31; --amb-blend: multiply; --amb-strength: .3; }
+html[data-ambient-theme='mirror'] { --amb: 170 190 215; --amb-2: 120 140 175; }
+html[data-ambient='off'] .ambient, html[data-ambient='off'] .glow { display: none; }
+
+.ambient { position: fixed; inset: 0; z-index: 30; pointer-events: none; overflow: hidden; mix-blend-mode: var(--amb-blend); opacity: var(--amb-strength); transition: opacity .8s; }
+.amb { position: absolute; border-radius: 50%; will-change: transform, opacity; }
+.amb-a { width: 70vmax; height: 70vmax; left: -22vmax; top: -28vmax; background: radial-gradient(closest-side, rgb(var(--amb) / .20), transparent); animation: amb-drift-a 26s ease-in-out infinite alternate; }
+.amb-b { width: 60vmax; height: 60vmax; right: -24vmax; bottom: -26vmax; background: radial-gradient(closest-side, rgb(var(--amb-2) / .16), transparent); animation: amb-drift-b 32s ease-in-out infinite alternate; }
+.amb-c { width: 42vmax; height: 42vmax; left: 38%; top: 52%; background: radial-gradient(closest-side, rgb(var(--amb) / .09), transparent); animation: amb-breathe 9s ease-in-out infinite; }
+.amb-lantern { position: absolute; inset: 0; opacity: 0; transition: opacity .8s; background: radial-gradient(circle 340px at var(--mx, 50%) var(--my, 40%), rgb(var(--amb) / .14), rgb(var(--amb) / .05) 45%, transparent 72%); }
+.ambient[data-lantern='on'] .amb-lantern { opacity: 1; }
+/* Haunted: a candle that never quite holds still. */
+html[data-ambient-theme='haunted'] .amb-a { animation: amb-drift-a 26s ease-in-out infinite alternate, amb-flicker 6s steps(1) infinite; }
+/* Folklore: fireflies. */
+.fly { display: none; position: absolute; left: var(--x); top: var(--y); width: 5px; height: 5px; border-radius: 50%; background: rgb(var(--amb)); box-shadow: 0 0 10px 3px rgb(var(--amb) / .65); animation: fly-drift var(--d) ease-in-out var(--delay) infinite alternate, fly-blink 4.5s ease-in-out var(--delay) infinite; }
+html[data-ambient-theme='folklore'] .fly { display: block; }
+@keyframes amb-drift-a { from { transform: translate(0, 0) scale(1); } to { transform: translate(9vmax, 6vmax) scale(1.12); } }
+@keyframes amb-drift-b { from { transform: translate(0, 0) scale(1.05); } to { transform: translate(-8vmax, -7vmax) scale(.92); } }
+@keyframes amb-breathe { 0%, 100% { opacity: .45; transform: scale(.94); } 50% { opacity: 1; transform: scale(1.08); } }
+@keyframes amb-flicker { 0%, 100% { opacity: 1; } 8% { opacity: .62; } 11% { opacity: .95; } 37% { opacity: .75; } 40% { opacity: 1; } 71% { opacity: .58; } 74% { opacity: .9; } }
+@keyframes fly-drift { from { transform: translate(0, 0); } to { transform: translate(7vw, -9vh); } }
+@keyframes fly-blink { 0%, 100% { opacity: .15; } 50% { opacity: 1; } }
+
+/* Image glow: a blurred copy of the picture lights up the area around it. */
+.glow-wrap { position: relative; isolation: isolate; }
+.glow { position: absolute; inset: -5%; z-index: -1; background-size: cover; background-position: center; filter: blur(54px) saturate(1.7); border-radius: 12px; animation: glow-breathe 8s ease-in-out infinite alternate; }
+.story[data-theme='chronicle'], .story[data-theme='fieldGuide'] { --glow: .35; }
+@keyframes glow-breathe { from { opacity: calc(var(--glow, .55) * .72); transform: scale(1.01); } to { opacity: var(--glow, .55); transform: scale(1.07); } }
+
+.icon-btn { width: 42px; height: 42px; display: inline-flex; align-items: center; justify-content: center; padding: 0; border: 1px solid var(--line-2); border-radius: 6px; background: transparent; color: var(--ash); cursor: pointer; transition: color .2s, border-color .2s; }
+.icon-btn[aria-pressed='true'] { color: var(--ember-hi); border-color: var(--ember); }
+@media (prefers-reduced-motion: reduce) { .amb-lantern { display: none; } }
