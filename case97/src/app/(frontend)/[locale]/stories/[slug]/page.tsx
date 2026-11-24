@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import type { Audio, Place } from '@/payload-types'
 import { Ad } from '@/components/Ad'
+import { SetAmbientTheme } from '@/components/Ambient'
 import { IconHeadphones, IconLock, IconPin } from '@/components/Icons'
 import { MapEmbed, mapLinks } from '@/components/MapEmbed'
 import { StoryCard } from '@/components/StoryCard'
@@ -68,6 +69,7 @@ export default async function StoryPage({ params }: Params) {
 
   return (
     <article className="story" data-theme={story.theme}>
+      <SetAmbientTheme theme={story.theme} />
       <header className="wrap story-head">
         <p className="case-tag">{t.themes[story.theme]} · {caseNo}{place ? ` · ${place.name}` : ''}</p>
         <h1>{story.title}</h1>
@@ -93,7 +95,14 @@ export default async function StoryPage({ params }: Params) {
           <p className="lang-notice" role="note">{t.story.fallbackNotice}</p>
         )}
       </header>
-      {cover && <div className="wrap"><div className="story-cover"><img src={cover} alt={coverAlt} /></div></div>}
+      {cover && (
+        <div className="wrap">
+          <div className="glow-wrap">
+            <div className="glow" aria-hidden="true" style={{ backgroundImage: `url(${imageUrl(story.coverImage, 'thumbnail')})` }} />
+            <div className="story-cover"><img src={cover} alt={coverAlt} /></div>
+          </div>
+        </div>
+      )}
 
       <StoryReader
         scroll={<StoryRichText data={content} />}
