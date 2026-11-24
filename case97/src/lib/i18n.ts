@@ -4,7 +4,7 @@ export const isLocale = (v: string): v is AppLocale => (locales as readonly stri
 export const toLocale = (v: string | undefined): AppLocale => (v && isLocale(v) ? v : defaultLocale)
 
 const en = {
-  nav: { stories: 'Stories', haunted: 'Haunted', history: 'History', legends: 'Legends', unsolved: 'Unsolved', guides: 'Field guides', signIn: 'Sign in', account: 'Account', premium: 'Go Premium', menu: 'Menu', language: 'Language' },
+  nav: { stories: 'Stories', haunted: 'Haunted', history: 'History', legends: 'Legends', unsolved: 'Unsolved', guides: 'Field guides', signIn: 'Sign in', account: 'Account', premium: 'Go Premium', menu: 'Menu', language: 'Language', ambient: 'Ambient light' },
   themes: { haunted: 'Haunted', chronicle: 'History', mystery: 'Unsolved', folklore: 'Legend', fieldGuide: 'Field guide' },
   common: { caseNo: 'Case No.', minRead: 'min read', creepiness: 'Creepiness', ad: 'Advertisement', allStories: 'All stories', back: 'Back' },
   home: {
@@ -52,7 +52,7 @@ const en = {
 export type Dict = typeof en
 
 const fr: Dict = {
-  nav: { stories: 'Histoires', haunted: 'Hantés', history: 'Histoire', legends: 'Légendes', unsolved: 'Énigmes', guides: 'Guides', signIn: 'Connexion', account: 'Compte', premium: 'Passer Premium', menu: 'Menu', language: 'Langue' },
+  nav: { stories: 'Histoires', haunted: 'Hantés', history: 'Histoire', legends: 'Légendes', unsolved: 'Énigmes', guides: 'Guides', signIn: 'Connexion', account: 'Compte', premium: 'Passer Premium', menu: 'Menu', language: 'Langue', ambient: 'Ambiance lumineuse' },
   themes: { haunted: 'Hanté', chronicle: 'Histoire', mystery: 'Énigme', folklore: 'Légende', fieldGuide: 'Guide' },
   common: { caseNo: 'Dossier n°', minRead: 'min de lecture', creepiness: 'Frisson', ad: 'Publicité', allStories: 'Toutes les histoires', back: 'Retour' },
   home: {
@@ -98,7 +98,7 @@ const fr: Dict = {
 }
 
 const es: Dict = {
-  nav: { stories: 'Historias', haunted: 'Embrujados', history: 'Historia', legends: 'Leyendas', unsolved: 'Misterios', guides: 'Guías', signIn: 'Entrar', account: 'Cuenta', premium: 'Hazte Premium', menu: 'Menú', language: 'Idioma' },
+  nav: { stories: 'Historias', haunted: 'Embrujados', history: 'Historia', legends: 'Leyendas', unsolved: 'Misterios', guides: 'Guías', signIn: 'Entrar', account: 'Cuenta', premium: 'Hazte Premium', menu: 'Menú', language: 'Idioma', ambient: 'Luz ambiental' },
   themes: { haunted: 'Embrujado', chronicle: 'Historia', mystery: 'Misterio', folklore: 'Leyenda', fieldGuide: 'Guía' },
   common: { caseNo: 'Caso n.º', minRead: 'min de lectura', creepiness: 'Escalofrío', ad: 'Publicidad', allStories: 'Todas las historias', back: 'Volver' },
   home: {
@@ -144,7 +144,7 @@ const es: Dict = {
 }
 
 const bn: Dict = {
-  nav: { stories: 'গল্প', haunted: 'ভৌতিক', history: 'ইতিহাস', legends: 'লোককথা', unsolved: 'রহস্য', guides: 'ভ্রমণ গাইড', signIn: 'সাইন ইন', account: 'অ্যাকাউন্ট', premium: 'প্রিমিয়াম নিন', menu: 'মেনু', language: 'ভাষা' },
+  nav: { stories: 'গল্প', haunted: 'ভৌতিক', history: 'ইতিহাস', legends: 'লোককথা', unsolved: 'রহস্য', guides: 'ভ্রমণ গাইড', signIn: 'সাইন ইন', account: 'অ্যাকাউন্ট', premium: 'প্রিমিয়াম নিন', menu: 'মেনু', language: 'ভাষা', ambient: 'পরিবেশের আলো' },
   themes: { haunted: 'ভৌতিক', chronicle: 'ইতিহাস', mystery: 'রহস্য', folklore: 'লোককথা', fieldGuide: 'ভ্রমণ গাইড' },
   common: { caseNo: 'কেস নং', minRead: 'মিনিট পড়া', creepiness: 'ভয়ের মাত্রা', ad: 'বিজ্ঞাপন', allStories: 'সব গল্প', back: 'ফিরে যান' },
   home: {
