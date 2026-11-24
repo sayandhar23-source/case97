@@ -15,7 +15,7 @@ export const Places: CollectionConfig = {
       unique: true,
       index: true,
       admin: { position: 'sidebar' },
-      hooks: { beforeValidate: [formatSlug('name')] },
+      hooks: { beforeValidate: [formatSlug('name', 'place')] },
     },
     {
       type: 'row',
