@@ -16,6 +16,8 @@ export const Stories: CollectionConfig = {
   access: { read: publishedOrAdmin, create: isAdmin, update: isAdmin, delete: isAdmin },
   hooks: { beforeChange: [setCaseNumber, setReadingTime, setPublishedAt] },
   fields: [
+    // Always-visible language tabs (English · Français · Español · বাংলা) with written/empty status.
+    { name: 'languageTabs', type: 'ui', admin: { components: { Field: '/components/admin/LanguageTabs#LanguageTabs' } } },
     {
       type: 'tabs',
       tabs: [
@@ -119,7 +121,7 @@ export const Stories: CollectionConfig = {
       unique: true,
       index: true,
       admin: { position: 'sidebar' },
-      hooks: { beforeValidate: [formatSlug('title')] },
+      hooks: { beforeValidate: [formatSlug('title', 'story')] },
     },
     {
       name: 'caseNumber',
