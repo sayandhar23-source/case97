@@ -1,3 +1,5 @@
+import { SetAmbientTheme } from './Ambient'
+
 // The haunted mirror: breathing fog and sketchy ghost eyes that appear,
 // look around, blink, bleed and fade. Pure SVG + CSS, no JavaScript.
 export function Mirror({ alert = false, label }: { alert?: boolean; label: string }) {
@@ -59,6 +61,7 @@ export function Mirror({ alert = false, label }: { alert?: boolean; label: strin
 export function AuthShell({ children, alert = false, label = 'SOUL SIGNATURE' }: { children: React.ReactNode; alert?: boolean; label?: string }) {
   return (
     <section className="auth">
+      <SetAmbientTheme theme="mirror" />
       <div className="auth-grid">
         <Mirror alert={alert} label={label} />
         <div className="auth-panel">{children}</div>
