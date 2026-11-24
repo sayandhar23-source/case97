@@ -4,6 +4,7 @@ import type { Category } from '@/payload-types'
 import type { AppLocale } from '@/lib/locales'
 import type { Dict } from '@/lib/i18n'
 import type { Viewer } from '@/lib/payload'
+import { AmbientToggle } from './Ambient'
 import { LanguageSwitcher } from './LanguageSwitcher'
 
 export function Header({ locale, t, viewer, categories }: { locale: AppLocale; t: Dict; viewer: Viewer; categories: Category[] }) {
@@ -23,6 +24,7 @@ export function Header({ locale, t, viewer, categories }: { locale: AppLocale; t
           ))}
         </nav>
         <div className="header-actions">
+          <AmbientToggle label={t.nav.ambient} />
           <Suspense fallback={null}>
             <LanguageSwitcher locale={locale} label={t.nav.language} />
           </Suspense>
