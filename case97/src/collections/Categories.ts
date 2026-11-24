@@ -16,7 +16,7 @@ export const Categories: CollectionConfig = {
       unique: true,
       index: true,
       admin: { position: 'sidebar' },
-      hooks: { beforeValidate: [formatSlug('name')] },
+      hooks: { beforeValidate: [formatSlug('name', 'category')] },
     },
     { name: 'description', type: 'textarea', localized: true },
     {
