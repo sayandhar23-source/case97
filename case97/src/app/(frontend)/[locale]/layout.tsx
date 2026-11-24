@@ -2,6 +2,7 @@ import '../styles.css'
 import type { Metadata } from 'next'
 import Script from 'next/script'
 import { redirect } from 'next/navigation'
+import { AmbientLight } from '@/components/Ambient'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import { getDict, isLocale } from '@/lib/i18n'
@@ -26,13 +27,16 @@ export default async function LocaleLayout({ children, params }: { children: Rea
   const loadAds = Boolean(ads?.enabled && ads.adsenseClientId && !viewer.isPremium)
 
   return (
-    <html lang={locale}>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link rel="stylesheet" href={FONTS} />
+        {/* Apply the saved ambient-light choice before the page paints (no flash). */}
+        <script dangerouslySetInnerHTML={{ __html: "try{if(localStorage.getItem('c97-ambient')==='off')document.documentElement.dataset.ambient='off'}catch(e){}" }} />
       </head>
       <body>
+        <AmbientLight />
         <a className="sr-only" href="#main">Skip to content</a>
         <Header locale={locale} t={t} viewer={viewer} categories={categories} />
         <main id="main">{children}</main>
