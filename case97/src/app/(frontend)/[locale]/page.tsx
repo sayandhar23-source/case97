@@ -60,7 +60,10 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
               {featured.creepinessLevel ? ` · ${t.common.creepiness} ${formatNumber(featured.creepinessLevel, locale)}/${formatNumber(5, locale)}` : ''}
             </p>
           </div>
-          <div className="hero-figure">{heroImg && <img src={heroImg} alt={heroAlt} />}</div>
+          <div className="glow-wrap">
+            {heroImg && <div className="glow" aria-hidden="true" style={{ backgroundImage: `url(${imageUrl(featured.coverImage, 'thumbnail')})` }} />}
+            <div className="hero-figure">{heroImg && <img src={heroImg} alt={heroAlt} />}</div>
+          </div>
         </div>
       </section>
 
